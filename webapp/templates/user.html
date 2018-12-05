@@ -1,0 +1,54 @@
+{% extends 'content/header.html' %}
+
+{% block content %}
+    <div>
+        <img style="float: left" src="{{ user.avatar(40) }}" alt="img">
+        <div style="margin-left: 60px"><h3>User:{{ user.username }}</h3></div>
+        <span>{% if user.about_me %}<p>about me: &nbsp;&nbsp;{{ user.about_me }}</p>{% endif %}</span>
+        <span>{% if user.last_seen %}<p>last seen: &nbsp;&nbsp;{{ user.last_seen }}</p>{% endif %}</span>
+        <a href="#" onclick="document.getElementById('addpost').style.display='block'">say something</a>
+        <a href="#" onclick="document.getElementById('edit').style.display='block'">modify about</a>
+        <div id="addpost" style="display: none">
+            <form action="" method="post">
+                {{ postform.hidden_tag() }}
+                <span>
+                    <h4>{{ postform.post.label }}</h4>
+                    {{ postform.post(cols=50, rows=4) }}<br>
+                    {% for error in postform.post.errors %}
+                        <span style="color: red">[{{ error }}]</span>
+                    {% endfor %}
+                </span>
+                <span>
+                {{ postform.submit() }}
+            </span>
+            </form>
+        </div>
+        <div id="edit" style="display: none">
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <span>
+                <h4>{{ form.about_me.label }}</h4>
+                    {{ form.about_me(cols=50, rows=4) }}<br>
+                    {% for error in form.about_me.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+            </span>
+                <span>
+                {{ form.submitupdate() }}
+            </span>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <div>
+        {% if not posts %}
+            <p>Nothing to show,
+                <a href="/add">say something</a>
+            </p>
+        {% endif %}
+        {% for post in posts %}
+            {% include 'content/_post.html' %}
+        {% endfor %}
+    </div>
+
+{% endblock %}
